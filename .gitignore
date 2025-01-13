@@ -1,3 +1,10 @@
+# python
+__*.*
+**/__*/
+
+# other
+*.png
+
 # Compiled Lua sources
 luac.out
 
