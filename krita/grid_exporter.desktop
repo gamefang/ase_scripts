@@ -3,5 +3,6 @@ Type=Service
 ServiceTypes=Krita/PythonPlugin
 X-KDE-Library=grid_exporter
 X-Python-2-Compatible=false
+X-Krita-Manual=Manual.txt
 Name=Grid Cell Exporter
 Comment=Export every rectangular grid cell of the active Krita document using visible layers.

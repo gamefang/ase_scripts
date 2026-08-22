@@ -1,0 +1,87 @@
+Grid Cell Exporter — Manual
+===========================
+
+Overview
+--------
+Exports each rectangular grid cell of the active Krita document as a separate PNG.
+Files are written next to the .kra file, inside a folder named:
+
+    <kra_basename><OUTPUT_DIR_SUFFIX>
+
+Example: MyArt.kra  +  suffix "_grid"  ->  MyArt_grid/
+
+
+Requirements
+------------
+- Active document must already be saved as a .kra file.
+- Document grid type must be Rectangular (not isometric).
+- Menu: Tools -> Export Grid Cells  (or the label set in SCRIPT_SHOW_NAME)
+
+
+Settings dialog
+---------------
+Every run opens a settings dialog first. Cancel aborts the export.
+Values are stored in kritarc under group [GridExporter] and restored next time.
+
+Setting                  Default     Description
+-------                  -------     -----------
+Output folder suffix     _grid       Appended to the .kra basename for the output folder.
+Skip empty cells         True        Skip cells that are fully transparent (by threshold)
+                                     or a single solid color (e.g. pure black).
+Empty alpha threshold    0           Alpha <= this value counts as transparent (0–255).
+Output filenames (csv)   (empty)     Comma-separated names used in export order.
+                                     Example: dog,cat,fish
+                                     Extra cells fall back to sequential numbers
+                                     based on grid cell index (1, 2, 3...).
+
+
+Empty-cell detection
+--------------------
+A cell is treated as empty when either:
+
+1. Every pixel has alpha <= Empty alpha threshold, or
+2. Every pixel is exactly the same color (uniform solid fill).
+
+This catches pure transparent areas and pure black/white background plates.
+If detection fails for any reason, the cell is still exported (safe default).
+
+
+File naming
+-----------
+- Cells are walked top-to-bottom, left-to-right.
+- Only non-skipped cells consume a name from the CSV list.
+- If the list is shorter than the number of exported cells, remaining files
+  use the original grid cell index (the index counts all cells, including
+  skipped ones).
+
+
+Developer notes
+---------------
+All user-facing options live in the SETTINGS dict at the top of the script.
+To add a new option:
+
+1. Add an entry to SETTINGS with keys: default, name, tip
+   Optional: type ('str'|'bool'|'int'), min, max for int spin boxes.
+2. The dialog, load/save, and runtime cfg are driven from that dict.
+3. Read values via self.cfg['KEY'] inside export logic.
+
+Runtime state is kept on the Extension instance (self.cfg), not globals.
+
+
+Limitations
+-----------
+- Only rectangular grids.
+- Node.save() may still show format dialogs on some Krita builds; batch mode
+  is enabled to reduce them.
+- Very large cells: empty check samples every pixel (can be slow on huge grids).
+
+
+Troubleshooting
+---------------
+- "No active document"         -> Open a document first.
+- "Please save the .kra"       -> Save the document, then run again.
+- "Grid is not rectangular"    -> View -> Show Grid, set type to Rectangular.
+- Empty cells still exported   -> Raise Empty alpha threshold, or confirm the
+                                 cell is not almost-uniform with noise/AA.
+- All Failed but files exist   -> Known Node.save() return-value quirk; the
+                                 script checks file presence/size instead.
