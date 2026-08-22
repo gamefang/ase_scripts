@@ -1,4 +1,6 @@
-# Aseprite Scripts and Others
+# Art tools
+
+> Art-related software plugins and toolsets, including original creations, AI-generated content, and curated works from others.
 
 ## Aseprite Scripts (lua)
 - [alpha_filter]: filter the image to non-alpha, based on threshold param.
@@ -7,6 +9,9 @@
 - [outline]: outline current layer
     - @outlineWidth: the width of outline
     - By Rik Nicol / @hot_pengu / https://github.com/rikfuzz/aseprite-scripts
+
+## Krita Scripts (py)
+- [grid_exporter]: export PNGs for every grid cells.
 
 ## Python Scripts (py)
 - [only_black]: same as alpha_filter.

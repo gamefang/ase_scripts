@@ -1,6 +1,8 @@
 # python
 __*.*
 **/__*/
+# keep __init__.py
+!**/__init*.py
 
 # other
 *.png
